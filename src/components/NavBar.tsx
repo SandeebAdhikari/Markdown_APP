@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import IconMenu from "/assets/icon-menu.svg";
 import IconClose from "/assets/icon-close.svg";
 import IconMarkDown from "/assets/MARKDOWN.svg";
@@ -9,9 +10,17 @@ import SideBar from "./SideBar";
 
 const NavBar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [documentCount, setDocumentCount] = useState(1);
+  const navigate = useNavigate();
 
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
+  };
+  const handleNewDocument = () => {
+    const newDocNumber = documentCount;
+    setDocumentCount((prev) => prev + 1);
+    navigate(`/doc${newDocNumber}`);
+    toggleSidebar();
   };
 
   return (
@@ -63,7 +72,11 @@ const NavBar = () => {
         </div>
       </div>
 
-      <SideBar isOpen={isOpen} toggleSidebar={toggleSidebar} />
+      <SideBar
+        isOpen={isOpen}
+        toggleSidebar={toggleSidebar}
+        handleNewDocument={handleNewDocument}
+      />
     </>
   );
 };

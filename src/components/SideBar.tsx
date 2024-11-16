@@ -5,9 +5,14 @@ import IconClose from "/assets/icon-close.svg";
 interface SideBarProps {
   isOpen: boolean;
   toggleSidebar: () => void;
+  handleNewDocument: () => void;
 }
 
-const SideBar: React.FC<SideBarProps> = ({ isOpen, toggleSidebar }) => {
+const SideBar: React.FC<SideBarProps> = ({
+  isOpen,
+  toggleSidebar,
+  handleNewDocument,
+}) => {
   return (
     <>
       <div
@@ -26,7 +31,10 @@ const SideBar: React.FC<SideBarProps> = ({ isOpen, toggleSidebar }) => {
           </button>
         </div>
 
-        <button className="mt-4 w-[202px] h-[40px] rounded bg-orange text-100 px-[44px] py-3 mx-6 text-[14px] flex items-center justify-start">
+        <button
+          onClick={handleNewDocument}
+          className="mt-4 w-[202px] h-[40px] rounded bg-orange text-100 px-[44px] py-3 mx-6 text-[14px] flex items-center justify-start"
+        >
           + New Document
         </button>
 

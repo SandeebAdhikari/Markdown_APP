@@ -3,8 +3,14 @@ import ReactMarkdown from "react-markdown";
 import { welcome } from "../utils/welcome";
 import IconPreview from "/assets/icon-show-preview.svg";
 
-const MarkdownEditor: React.FC = () => {
-  const [markdownText, setMarkdownText] = useState<string>(welcome);
+interface MarkdownEditorProps {
+  empty?: boolean;
+}
+
+const MarkdownEditor: React.FC<MarkdownEditorProps> = ({ empty }) => {
+  const [markdownText, setMarkdownText] = useState<string>(
+    empty ? "" : welcome
+  );
 
   const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setMarkdownText(event.target.value);
@@ -34,7 +40,7 @@ const MarkdownEditor: React.FC = () => {
             className="w-4 h-[11.2px] mr-4 hover:cursor-pointer"
           />
         </div>
-        <div className="prose max-w-full bg-100 p-4 flex-1 overflow-auto hide-scrollbar">
+        <div className="w-full bg-100 p-4 flex-1 overflow-auto">
           <ReactMarkdown>{markdownText}</ReactMarkdown>
         </div>
       </div>
