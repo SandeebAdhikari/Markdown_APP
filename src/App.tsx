@@ -3,6 +3,12 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import NavBar from "./components/NavBar";
 import MarkdownEditor from "./pages/MarkdownEditor";
 
+interface Document {
+  name: string;
+  content: string;
+  date: string;
+}
+
 const App: React.FC = () => {
   const [documents, setDocuments] = useState<Document[]>([]);
 
@@ -14,35 +20,16 @@ const App: React.FC = () => {
     setDocuments(savedDocuments);
   }, []);
 
-  // Save documents to localStorage whenever the documents array changes
-  useEffect(() => {
-    localStorage.setItem("documents", JSON.stringify(documents));
-  }, [documents]);
   return (
     <Router>
-      <div className="flex flex-col min-h-screen">
-        <NavBar />
-        <Routes>
-          <Route
-            path="/"
-            element={
-              <MarkdownEditor
-                documents={documents}
-                setDocuments={setDocuments}
-              />
-            }
-          />
-          <Route
-            path="/doc:docId"
-            element={
-              <MarkdownEditor
-                documents={documents}
-                setDocuments={setDocuments}
-              />
-            }
-          />
-        </Routes>
-      </div>
+      <NavBar />
+      <Routes>
+        <Route path="/" element={<MarkdownEditor documents={documents} />} />
+        <Route
+          path="/:docId"
+          element={<MarkdownEditor documents={documents} />}
+        />
+      </Routes>
     </Router>
   );
 };
