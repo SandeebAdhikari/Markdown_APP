@@ -47,7 +47,7 @@ export default {
         300: "#E4E4E4",
         200: "#F5F5F5",
         100: "#FFFFFF",
-        orange: "E46643",
+        orange: "#E46643",
         orangeHover: "#F39765",
       },
     },

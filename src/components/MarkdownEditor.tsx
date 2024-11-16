@@ -33,7 +33,7 @@ const MarkdownEditor: React.FC = () => {
           <img
             src={IconPreview}
             alt="Preview Icon"
-            className="w-4 h-[11.2px] mr-4"
+            className="w-4 h-[11.2px] mr-4 hover:cursor-pointer"
           />
         </div>
         <div className="prose  max-w-full bg-100 p-4">
