@@ -2,6 +2,20 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --bg-light: 100;
+  --bg-dark: 1000;
+}
+
+body {
+  transition: background-color 0.3s, color 0.3s;
+}
+
+body.dark {
+  background-color: var(--bg-dark);
+  color: #ffffff;
+}
+
 .hide-scrollbar::-webkit-scrollbar {
   display: none;
 }

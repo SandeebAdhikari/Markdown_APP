@@ -12,7 +12,6 @@ interface Document {
 const App: React.FC = () => {
   const [documents, setDocuments] = useState<Document[]>([]);
 
-  // Load documents from localStorage on initial render
   useEffect(() => {
     const savedDocuments = JSON.parse(
       localStorage.getItem("documents") || "[]"

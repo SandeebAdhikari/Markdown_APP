@@ -19,6 +19,9 @@ const NavBar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [documents, setDocuments] = useState<Document[]>([]);
   const [documentCount, setDocumentCount] = useState(1);
+  const [isDarkMode, setIsDarkMode] = useState(
+    localStorage.getItem("theme") === "dark"
+  );
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -28,6 +31,13 @@ const NavBar: React.FC = () => {
     if (location.pathname === "/") return "welcome.md";
     const match = location.pathname.match(/\/doc(\d+)/);
     return match ? `doc${match[1]}.md` : "welcome.md";
+  };
+
+  const handleToggleTheme = () => {
+    const newTheme = isDarkMode ? "light" : "dark";
+    setIsDarkMode(!isDarkMode);
+    localStorage.setItem("theme", newTheme);
+    document.documentElement.classList.toggle("dark", newTheme === "dark");
   };
 
   useEffect(() => {
@@ -51,6 +61,14 @@ const NavBar: React.FC = () => {
   useEffect(() => {
     localStorage.setItem("documents", JSON.stringify(documents));
   }, [documents]);
+
+  useEffect(() => {
+    if (isDarkMode) {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+  }, [isDarkMode]);
 
   const handleNewDocument = () => {
     const newDocName = `doc${documentCount}`;
@@ -142,6 +160,9 @@ const NavBar: React.FC = () => {
         </div>
 
         <div className="flex items-center gap-6 mr-4">
+          <button onClick={handleToggleTheme} className="text-100">
+            {isDarkMode ? "🌙" : "☀️"}
+          </button>
           <img
             src={IconDelete}
             alt="Delete Icon"

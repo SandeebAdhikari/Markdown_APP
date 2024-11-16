@@ -19,6 +19,9 @@ const MarkdownEditor: React.FC<MarkdownEditorProps> = ({ documents }) => {
   const { docId } = useParams();
   const location = useLocation();
   const [showPreviewOnly, setShowPreviewOnly] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(
+    localStorage.getItem("theme") === "dark"
+  );
 
   const isWelcomePage = location.pathname === "/";
   const currentDoc = documents.find((doc) => doc.name === `doc${docId}`);
@@ -43,18 +46,25 @@ const MarkdownEditor: React.FC<MarkdownEditorProps> = ({ documents }) => {
     setShowPreviewOnly(!showPreviewOnly);
   };
 
+  const editorHeaderClass = isDarkMode ? "bg-900 text-500" : "bg-200 text-700";
+  const editorContentClass = isDarkMode ? "bg-1000" : "bg-100";
+  const textareaTextClass = isDarkMode ? "text-400" : "text-black";
+  const previewTextClass = isDarkMode ? "text-100" : "text-black";
+
   return (
     <div className="flex w-full min-h-screen bg-300">
       {!showPreviewOnly && (
-        <div className="w-1/2 bg-200 h-screen flex flex-col">
-          <h2 className="text-[14px] text-500 letterSpacing-wider font-medium py-3 ml-4">
+        <div className={`w-1/2 ${editorContentClass} h-screen flex flex-col`}>
+          <h2
+            className={`text-[14px] letterSpacing-wider font-medium py-3 ml-4 ${editorHeaderClass}`}
+          >
             MARKDOWN
           </h2>
           <textarea
             id="markdown-textarea"
             value={markdownText}
             onChange={handleChange}
-            className="w-full flex-1 p-4 bg-100 text-black hide-scrollbar focus:outline-none resize-none"
+            className={`w-full flex-1 p-4 ${editorContentClass} ${textareaTextClass} hide-scrollbar focus:outline-none resize-none`}
           />
         </div>
       )}
@@ -63,22 +73,26 @@ const MarkdownEditor: React.FC<MarkdownEditorProps> = ({ documents }) => {
 
       <div
         className={`${
-          showPreviewOnly ? "w-full mx-[384px] " : "w-1/2"
-        } bg-200 h-screen flex flex-col items-center justify-center`}
+          showPreviewOnly ? "w-full mx-[384px]" : "w-1/2"
+        } ${editorContentClass} h-screen flex flex-col items-center justify-center`}
       >
-        <div className="flex items-center justify-between w-full">
-          <h2 className="text-[14px] text-500 letterSpacing-wider font-medium py-3 ml-4">
+        <div
+          className={`flex items-center justify-between w-full ${editorHeaderClass}`}
+        >
+          <h2 className="text-[14px] letterSpacing-wider font-medium py-3 ml-4">
             PREVIEW
           </h2>
           <img
             src={showPreviewOnly ? IconHidePreview : IconPreview}
-            alt="Preview Toggle Icon"
+            alt="Toggle Preview"
             onClick={togglePreview}
             className="w-4 h-[11.2px] mr-4 hover:cursor-pointer"
           />
         </div>
-        <div className="prose w-full max-w-full bg-100 p-4 flex-1 overflow-auto hide-scrollbar">
-          <ReactMarkdown className="w-full">{markdownText}</ReactMarkdown>
+        <div
+          className={`prose w-full max-w-full p-4 flex-1 overflow-auto hide-scrollbar ${previewTextClass}`}
+        >
+          <ReactMarkdown>{markdownText}</ReactMarkdown>
         </div>
       </div>
     </div>
