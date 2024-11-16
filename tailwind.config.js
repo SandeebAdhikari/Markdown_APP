@@ -36,7 +36,6 @@ export default {
         wide: "0.125em",
         wider: "0.2em",
       },
-
       colors: {
         1000: "#151619",
         900: "#1D1F22",

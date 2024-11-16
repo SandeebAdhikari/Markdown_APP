@@ -11,7 +11,7 @@ body {
   transition: background-color 0.3s, color 0.3s;
 }
 
-body.dark {
+.dark {
   background-color: var(--bg-dark);
   color: #ffffff;
 }
