@@ -19,7 +19,7 @@ const MarkdownEditor: React.FC<MarkdownEditorProps> = ({ documents }) => {
   const { docId } = useParams();
   const location = useLocation();
   const [showPreviewOnly, setShowPreviewOnly] = useState(false);
-  const [isDarkMode] = useState(localStorage.getItem("theme") === "dark");
+  const isDarkMode = localStorage.getItem("theme") === "dark";
 
   const isWelcomePage = location.pathname === "/";
   const currentDoc = documents.find((doc) => doc.name === `doc${docId}`);

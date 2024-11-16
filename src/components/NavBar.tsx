@@ -33,11 +33,18 @@ const NavBar: React.FC = () => {
     return match ? `doc${match[1]}.md` : "welcome.md";
   };
 
+  // Toggle the theme and apply it immediately
   const handleToggleTheme = () => {
     const newTheme = isDarkMode ? "light" : "dark";
     setIsDarkMode(!isDarkMode);
     localStorage.setItem("theme", newTheme);
-    document.documentElement.classList.toggle("dark", newTheme === "dark");
+
+    // Apply the theme immediately to the document
+    if (newTheme === "dark") {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
   };
 
   useEffect(() => {
@@ -62,13 +69,14 @@ const NavBar: React.FC = () => {
     localStorage.setItem("documents", JSON.stringify(documents));
   }, [documents]);
 
+  // Apply the saved theme on initial load
   useEffect(() => {
     if (isDarkMode) {
       document.documentElement.classList.add("dark");
     } else {
       document.documentElement.classList.remove("dark");
     }
-  }, [isDarkMode]);
+  }, []);
 
   const handleNewDocument = () => {
     const newDocName = `doc${documentCount}`;
@@ -179,7 +187,6 @@ const NavBar: React.FC = () => {
         </div>
       </div>
 
-      {/* Sidebar */}
       <SideBar
         isOpen={isOpen}
         toggleSidebar={toggleSidebar}
