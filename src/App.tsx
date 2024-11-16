@@ -1,37 +1,46 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import NavBar from "./components/NavBar";
 import MarkdownEditor from "./pages/MarkdownEditor";
 
 const App: React.FC = () => {
-  const [documentCount, setDocumentCount] = useState(1);
+  const [documents, setDocuments] = useState<Document[]>([]);
 
-  const handleNewDocument = () => {
-    setDocumentCount((prev) => prev + 1);
-  };
+  // Load documents from localStorage on initial render
+  useEffect(() => {
+    const savedDocuments = JSON.parse(
+      localStorage.getItem("documents") || "[]"
+    );
+    setDocuments(savedDocuments);
+  }, []);
 
+  // Save documents to localStorage whenever the documents array changes
+  useEffect(() => {
+    localStorage.setItem("documents", JSON.stringify(documents));
+  }, [documents]);
   return (
     <Router>
       <div className="flex flex-col min-h-screen">
-        <NavBar
-          handleNewDocument={handleNewDocument}
-          documentCount={documentCount}
-        />
+        <NavBar />
         <Routes>
-          {/* Default route for welcome document */}
           <Route
             path="/"
-            element={<MarkdownEditor documentName="welcome.md" />}
+            element={
+              <MarkdownEditor
+                documents={documents}
+                setDocuments={setDocuments}
+              />
+            }
           />
-
-          {/* Dynamically generate routes for new documents */}
-          {[...Array(documentCount)].map((_, index) => (
-            <Route
-              key={index}
-              path={`/doc${index + 1}`}
-              element={<MarkdownEditor documentName={`DOC${index + 1}`} />}
-            />
-          ))}
+          <Route
+            path="/doc:docId"
+            element={
+              <MarkdownEditor
+                documents={documents}
+                setDocuments={setDocuments}
+              />
+            }
+          />
         </Routes>
       </div>
     </Router>
