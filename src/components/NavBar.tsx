@@ -30,13 +30,11 @@ const NavBar: React.FC = () => {
     return match ? `doc${match[1]}.md` : "welcome.md";
   };
 
-  // Load documents from localStorage on initial render
   useEffect(() => {
     const savedDocuments = JSON.parse(
       localStorage.getItem("documents") || "[]"
     );
 
-    // Add the welcome document only if it doesn't already exist
     if (!savedDocuments.find((doc: Document) => doc.name === "welcome")) {
       const welcomeDoc = {
         name: "welcome",
@@ -50,12 +48,10 @@ const NavBar: React.FC = () => {
     setDocumentCount(savedDocuments.length);
   }, []);
 
-  // Save documents to localStorage whenever the documents array changes
   useEffect(() => {
     localStorage.setItem("documents", JSON.stringify(documents));
   }, [documents]);
 
-  // Handle creating a new document
   const handleNewDocument = () => {
     const newDocName = `doc${documentCount}`;
     const newDocument = {
@@ -70,7 +66,6 @@ const NavBar: React.FC = () => {
     toggleSidebar();
   };
 
-  // Handle saving the current document
   const handleSaveDocument = () => {
     const textarea = document.getElementById(
       "markdown-textarea"
@@ -90,11 +85,9 @@ const NavBar: React.FC = () => {
     localStorage.setItem("documents", JSON.stringify(updatedDocuments));
   };
 
-  // Handle deleting the current document
   const handleDeleteDocument = () => {
     const currentDocName = getCurrentDocumentName().replace(".md", "");
 
-    // Do not delete the welcome document
     if (currentDocName === "welcome") {
       alert("Cannot delete the welcome document!");
       return;
@@ -107,7 +100,6 @@ const NavBar: React.FC = () => {
     setDocuments(updatedDocuments);
     localStorage.setItem("documents", JSON.stringify(updatedDocuments));
 
-    // Navigate back to the welcome page after deletion
     navigate("/");
   };
 

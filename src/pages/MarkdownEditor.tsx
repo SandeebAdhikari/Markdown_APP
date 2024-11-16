@@ -21,12 +21,10 @@ const MarkdownEditor: React.FC<MarkdownEditorProps> = ({ documents }) => {
   const isWelcomePage = location.pathname === "/";
   const currentDoc = documents.find((doc) => doc.name === `doc${docId}`);
 
-  // Initialize state with the welcome message or the content of the current document
   const [markdownText, setMarkdownText] = useState<string>(
     isWelcomePage ? welcome : currentDoc?.content || ""
   );
 
-  // Update markdownText when the route changes
   useEffect(() => {
     if (isWelcomePage) {
       setMarkdownText(welcome);
