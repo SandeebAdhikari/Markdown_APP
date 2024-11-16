@@ -46,6 +46,7 @@ const MarkdownEditor: React.FC<MarkdownEditorProps> = ({ documents }) => {
           MARKDOWN
         </h2>
         <textarea
+          id="markdown-textarea"
           value={markdownText}
           onChange={handleChange}
           className="w-full flex-1 p-4 bg-100 text-black hide-scrollbar focus:outline-none resize-none"

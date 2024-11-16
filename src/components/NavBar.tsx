@@ -7,6 +7,7 @@ import IconDoc from "/assets/icon-document.svg";
 import IconDelete from "/assets/icon-delete.svg";
 import IconSave from "/assets/icon-save.svg";
 import SideBar from "./SideBar";
+import { welcome } from "../utils/welcome";
 
 interface Document {
   name: string;
@@ -14,18 +15,15 @@ interface Document {
   date: string;
 }
 
-const NavBar = () => {
+const NavBar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [documents, setDocuments] = useState<Document[]>([]);
   const [documentCount, setDocumentCount] = useState(1);
   const navigate = useNavigate();
   const location = useLocation();
 
-  const toggleSidebar = () => {
-    setIsOpen(!isOpen);
-  };
+  const toggleSidebar = () => setIsOpen(!isOpen);
 
-  // Get current document name from URL
   const getCurrentDocumentName = () => {
     if (location.pathname === "/") return "welcome.md";
     const match = location.pathname.match(/\/doc(\d+)/);
@@ -37,8 +35,19 @@ const NavBar = () => {
     const savedDocuments = JSON.parse(
       localStorage.getItem("documents") || "[]"
     );
+
+    // Add the welcome document only if it doesn't already exist
+    if (!savedDocuments.find((doc: Document) => doc.name === "welcome")) {
+      const welcomeDoc = {
+        name: "welcome",
+        content: welcome,
+        date: new Date().toLocaleDateString(),
+      };
+      savedDocuments.unshift(welcomeDoc);
+    }
+
     setDocuments(savedDocuments);
-    setDocumentCount(savedDocuments.length + 1);
+    setDocumentCount(savedDocuments.length);
   }, []);
 
   // Save documents to localStorage whenever the documents array changes
@@ -54,6 +63,7 @@ const NavBar = () => {
       content: "",
       date: new Date().toLocaleDateString(),
     };
+
     setDocuments([...documents, newDocument]);
     setDocumentCount(documentCount + 1);
     navigate(`/${newDocName}`);
@@ -77,6 +87,28 @@ const NavBar = () => {
     );
 
     setDocuments(updatedDocuments);
+    localStorage.setItem("documents", JSON.stringify(updatedDocuments));
+  };
+
+  // Handle deleting the current document
+  const handleDeleteDocument = () => {
+    const currentDocName = getCurrentDocumentName().replace(".md", "");
+
+    // Do not delete the welcome document
+    if (currentDocName === "welcome") {
+      alert("Cannot delete the welcome document!");
+      return;
+    }
+
+    const updatedDocuments = documents.filter(
+      (doc) => doc.name !== currentDocName
+    );
+
+    setDocuments(updatedDocuments);
+    localStorage.setItem("documents", JSON.stringify(updatedDocuments));
+
+    // Navigate back to the welcome page after deletion
+    navigate("/");
   };
 
   return (
@@ -122,10 +154,11 @@ const NavBar = () => {
             src={IconDelete}
             alt="Delete Icon"
             className="w-[18px] h-[20px] hover:cursor-pointer"
+            onClick={handleDeleteDocument}
           />
           <button
             onClick={handleSaveDocument}
-            className="w-[152px] h-[40px] py-[10px] bg-orange text-100 flex items-center justify-center text-[15px] gap-2 rounded"
+            className="w-[152px] h-[40px] py-[10px] bg-orange text-100 flex items-center justify-center text-[15px] gap-2 rounded hover:bg-orangeHover"
           >
             <img src={IconSave} alt="Save Icon" className="w-4 h-4" />
             <h1>SAVE</h1>
@@ -133,6 +166,7 @@ const NavBar = () => {
         </div>
       </div>
 
+      {/* Sidebar */}
       <SideBar
         isOpen={isOpen}
         toggleSidebar={toggleSidebar}

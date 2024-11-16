@@ -25,8 +25,12 @@ const SideBar: React.FC<SideBarProps> = ({
   const navigate = useNavigate();
 
   const handleDocumentClick = (docName: string) => {
-    navigate(`/${docName}`);
-    toggleSidebar(); // Close sidebar after navigation
+    if (docName === "welcome") {
+      navigate("/");
+    } else {
+      navigate(`/${docName}`);
+    }
+    toggleSidebar();
   };
 
   return (
